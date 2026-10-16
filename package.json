@@ -1,0 +1,34 @@
+{
+  "name": "apoteku",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "bun run --filter '*' dev",
+    "dev:web": "bun run --filter @apoteku/web dev",
+    "dev:api": "bun run --filter @apoteku/api dev",
+    "build": "bun run --filter '*' build",
+    "typecheck": "bun run --filter '*' typecheck",
+    "db:generate": "bun run --filter @apoteku/api db:generate",
+    "db:migrate": "bun run --filter @apoteku/api db:migrate",
+    "db:push": "bun run --filter @apoteku/api db:push",
+    "db:seed": "bun run --filter @apoteku/api db:seed",
+    "test:security": "bun run tools/security-test.ts",
+    "test:load": "bun run tools/loadtest.ts",
+    "test:audit": "bun run tools/audit-test.ts",
+    "test:e2e": "bun run tools/e2e.ts",
+    "test:e2e:api": "bun run tools/e2e-api.ts",
+    "test:e2e:browser": "bun run tools/e2e-browser.ts",
+    "docs:screenshots": "bun run tools/screenshots.ts",
+    "docs:pdf": "tectonic docs/panduan-pengguna.tex --outdir docs",
+    "docker:e2e": "docker compose -f docker-compose.e2e.yml up --build --abort-on-container-exit --exit-code-from e2e",
+    "docker:e2e:down": "docker compose -f docker-compose.e2e.yml down -v"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.1"
+  }
+}

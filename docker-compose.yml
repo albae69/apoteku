@@ -1,0 +1,23 @@
+# MySQL for local development.
+#   docker compose up -d
+# Then copy .env.example to .env (both root and apps/api as needed).
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: apoteku-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: apoteku
+    ports:
+      - "3306:3306"
+    volumes:
+      - apoteku-mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  apoteku-mysql-data:

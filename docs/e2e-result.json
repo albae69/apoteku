@@ -1,0 +1,249 @@
+{
+  "at": "2026-10-16T05:51:02.073Z",
+  "durationMs": 27460,
+  "totals": {
+    "total": 37,
+    "passed": 37,
+    "failed": 0
+  },
+  "suites": [
+    {
+      "suite": "E2E API · http://api:4000",
+      "at": "2026-10-16T05:51:02.073Z",
+      "passed": 23,
+      "failed": 0,
+      "checks": [
+        {
+          "code": "E2E-A01",
+          "name": "API sehat dan siap menerima permintaan",
+          "pass": true,
+          "detail": "status=200 body={\"status\":\"ok\",\"time\":\"2026-10-16T05:50:34.614Z\"}"
+        },
+        {
+          "code": "E2E-A02",
+          "name": "Login tiga role berhasil, password salah ditolak",
+          "pass": true,
+          "detail": "owner=200 kasir=200 apoteker=200 salah=401"
+        },
+        {
+          "code": "E2E-A03",
+          "name": "RBAC: kasir ditolak, owner boleh membuat produk",
+          "pass": true,
+          "detail": "kasir=403 owner=201"
+        },
+        {
+          "code": "E2E-A04",
+          "name": "Master data terbentuk (supplier oleh owner, pelanggan oleh kasir)",
+          "pass": true,
+          "detail": "supplier=201 customer=201"
+        },
+        {
+          "code": "E2E-A05",
+          "name": "Produk multi-satuan tersimpan & terbaca kembali",
+          "pass": true,
+          "detail": "units=tablet×1, strip×10"
+        },
+        {
+          "code": "E2E-A06",
+          "name": "Pembelian diterima → batch baru & stok bertambah",
+          "pass": true,
+          "detail": "po=201 receive=200 stok=50"
+        },
+        {
+          "code": "E2E-A07",
+          "name": "Peringatan kedaluwarsa mendeteksi batch OBH-D1 (habis dalam 25 hari)",
+          "pass": true,
+          "detail": "expiring=OBH-D1,PCM-A2"
+        },
+        {
+          "code": "E2E-A08",
+          "name": "Penyesuaian stok (opname −2) tercatat di kartu stok",
+          "pass": true,
+          "detail": "stok=48 mutasi=ada"
+        },
+        {
+          "code": "E2E-A09",
+          "name": "Kasir membuka shift dengan uang awal Rp200.000",
+          "pass": true,
+          "detail": "open=201 expectedCash=200000"
+        },
+        {
+          "code": "E2E-A10",
+          "name": "Transaksi ditolak (409) bila kasir belum membuka shift",
+          "pass": true,
+          "detail": "status=409 error=Buka shift kasir terlebih dahulu sebelum bertransaksi"
+        },
+        {
+          "code": "E2E-A11",
+          "name": "FEFO: batch kedaluwarsa terdekat (PCM-A2) yang terpakai lebih dulu",
+          "pass": true,
+          "detail": "batch terpakai=PCM-A2 PCM-A1=500→500 PCM-A2=120→117"
+        },
+        {
+          "code": "E2E-A12",
+          "name": "Hitung nota benar: subtotal 2.100, total 2.100, kembalian 2.900",
+          "pass": true,
+          "detail": "subtotal=2100 total=2100 dibayar=5000 kembali=2900"
+        },
+        {
+          "code": "E2E-A13",
+          "name": "Jual 1 strip = 10 tablet (konversi satuan) & stok turun 10",
+          "pass": true,
+          "detail": "items=10 total=6500 stok 617→607"
+        },
+        {
+          "code": "E2E-A14",
+          "name": "Pembayaran kurang dari total ditolak (400)",
+          "pass": true,
+          "detail": "status=400 error=Jumlah pembayaran kurang dari total"
+        },
+        {
+          "code": "E2E-A15",
+          "name": "Stok tidak mencukupi ditolak & stok tidak berubah (transaksi di-rollback)",
+          "pass": true,
+          "detail": "status=409 stok 607→607"
+        },
+        {
+          "code": "E2E-A16",
+          "name": "Pembayaran non-tunai (QRIS) tercatat pada nota",
+          "pass": true,
+          "detail": "status=201 metode=qris"
+        },
+        {
+          "code": "E2E-A17",
+          "name": "Resep dapat dibuat kasir dan dibaca apoteker (item racikan tersimpan)",
+          "pass": true,
+          "detail": "create=201 detail=200 signa=3 x 1 sehari"
+        },
+        {
+          "code": "E2E-A18",
+          "name": "Dashboard mencerminkan penjualan hari ini (3 nota, omzet cocok)",
+          "pass": true,
+          "detail": "transaksi=3 omzet=10400 (harap=10400)"
+        },
+        {
+          "code": "E2E-A19",
+          "name": "Rekonsiliasi kas: total, tunai, non-tunai, dan selisih Rp5.000 dihitung tepat",
+          "pass": true,
+          "detail": "transaksi=3 omzet=10400 tunai=8600 nonTunai=1800 expectedCash=208600 selisih=5000"
+        },
+        {
+          "code": "E2E-A19b",
+          "name": "Shift yang sudah ditutup tidak bisa ditutup lagi (409)",
+          "pass": true,
+          "detail": "status=409"
+        },
+        {
+          "code": "E2E-A20",
+          "name": "Audit harian merekam seluruh perjalanan & tidak membocorkan rahasia",
+          "pass": true,
+          "detail": "aksi=auth.login, shift.open, sale.create, shift.close, inventory.adjust rahasia=tidak ada"
+        },
+        {
+          "code": "E2E-A21",
+          "name": "10 transaksi serentak memperebutkan stok 5 → tepat 5 sukses, stok berakhir 0",
+          "pass": true,
+          "detail": "sukses=5 ditolak=5 sisa stok=0"
+        },
+        {
+          "code": "E2E-A21b",
+          "name": "Semua kode nota unik (tidak ada duplikasi di bawah konkurensi)",
+          "pass": true,
+          "detail": "total=8 unik=8"
+        }
+      ]
+    },
+    {
+      "suite": "E2E Browser (Chromium) · http://web",
+      "at": "2026-10-16T05:51:02.073Z",
+      "passed": 14,
+      "failed": 0,
+      "checks": [
+        {
+          "code": "E2E-B01",
+          "name": "Web tersaji (nginx) & aplikasi React berhasil dimuat",
+          "pass": true,
+          "detail": "status=200 server=nginx/1.27.5 root=true formLogin=true"
+        },
+        {
+          "code": "E2E-B02",
+          "name": "Login lewat form berhasil & shell aplikasi tampil sebagai kasir",
+          "pass": true,
+          "detail": "pengguna terlihat=true"
+        },
+        {
+          "code": "E2E-B03",
+          "name": "Aplikasi memanggil API lewat origin yang sama (tanpa CORS/port 4000)",
+          "pass": true,
+          "detail": "semua permintaan /api relatif"
+        },
+        {
+          "code": "E2E-B04",
+          "name": "Shift kasir dibuka dari UI, layar kasir siap menerima transaksi",
+          "pass": true,
+          "detail": "shift baru dibuka (uang awal 200.000)"
+        },
+        {
+          "code": "E2E-B05",
+          "name": "Pencarian produk menampilkan hasil secara langsung",
+          "pass": true,
+          "detail": "Paracetamol 500mg ditemukan"
+        },
+        {
+          "code": "E2E-B06",
+          "name": "Menambah 3 tablet ke keranjang menghitung total Rp2.100",
+          "pass": true,
+          "detail": "teks tombol=\"Bayar Rp 2.100\""
+        },
+        {
+          "code": "E2E-B07",
+          "name": "Kembalian dihitung otomatis (Rp5.000 − Rp2.100 = Rp2.900)",
+          "pass": true,
+          "detail": "labelKembalian=true nilai2000=true"
+        },
+        {
+          "code": "E2E-B08",
+          "name": "Transaksi disimpan dari UI dan nota berhasil dibuat",
+          "pass": true,
+          "detail": "teks=\"Transaksi INV-20261016-PNR672 berhasil\" kode=INV-20261016-PNR672"
+        },
+        {
+          "code": "E2E-B09",
+          "name": "Struk 80mm tercetak dengan nama apotek, nomor nota, dan total",
+          "pass": true,
+          "detail": "apotek=true noNota=true total=true"
+        },
+        {
+          "code": "E2E-B10",
+          "name": "Nota baru muncul di riwayat transaksi",
+          "pass": true,
+          "detail": "kode=INV-20261016-PNR672"
+        },
+        {
+          "code": "E2E-B11",
+          "name": "Halaman shift menampilkan shift terbuka dengan uang awal 200.000",
+          "pass": true,
+          "detail": "uangAwalTerlihat=true"
+        },
+        {
+          "code": "E2E-B12",
+          "name": "Deep link SPA (/inventory) dilayani nginx tanpa 404",
+          "pass": true,
+          "detail": "status=200 halaman=true"
+        },
+        {
+          "code": "E2E-B13",
+          "name": "Semua 8 halaman utama terbuka tanpa error boundary",
+          "pass": true,
+          "detail": "seluruh halaman sehat"
+        },
+        {
+          "code": "E2E-B14",
+          "name": "Logout mengembalikan pengguna ke halaman masuk",
+          "pass": true,
+          "detail": "loginTampil=true"
+        }
+      ]
+    }
+  ]
+}

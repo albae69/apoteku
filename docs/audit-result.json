@@ -1,0 +1,91 @@
+{
+  "base": "http://localhost:4000",
+  "at": "2026-10-16T04:38:48.000Z",
+  "file": "/Users/bae/code/project/apoteku/apps/api/logs/audit/audit-2026-10-16.log",
+  "checks": [
+    {
+      "code": "AUD-01",
+      "name": "Login sukses tercatat lengkap (aktor + role)",
+      "pass": true,
+      "detail": "action=auth.login outcome=success actor=owner@apoteku.test/owner ip=local"
+    },
+    {
+      "code": "AUD-02",
+      "name": "Login gagal tercatat dengan alasan, tanpa aktor",
+      "pass": true,
+      "detail": "status=401 reason=password_salah actor=null"
+    },
+    {
+      "code": "AUD-03",
+      "name": "Berkas audit tidak memuat password/token/secret",
+      "pass": true,
+      "detail": "bersih"
+    },
+    {
+      "code": "AUD-04",
+      "name": "Buka shift tercatat dengan uang awal",
+      "pass": true,
+      "detail": "entity=shift#1 openingCash=150000"
+    },
+    {
+      "code": "AUD-05",
+      "name": "Penjualan tercatat dengan nota, total, dan shift",
+      "pass": true,
+      "detail": "entityId=1 code=INV-20261016-DQOW1A total=5000 shift=1"
+    },
+    {
+      "code": "AUD-06",
+      "name": "Tutup shift tercatat dengan selisih kas",
+      "pass": true,
+      "detail": "entityId=1 difference=-5000"
+    },
+    {
+      "code": "AUD-07",
+      "name": "Penyesuaian stok tercatat dengan batch & jumlah",
+      "pass": true,
+      "detail": "entityId=5 delta=3"
+    },
+    {
+      "code": "AUD-08",
+      "name": "Perubahan pengaturan tercatat dengan aktor owner",
+      "pass": true,
+      "detail": "actor=owner@apoteku.test pharmacyName=Apoteku Sehat"
+    },
+    {
+      "code": "AUD-09",
+      "name": "Berkas JSONL harian valid & berurutan waktu",
+      "pass": true,
+      "detail": "9 baris · nama berkas=audit-2026-10-16.log"
+    },
+    {
+      "code": "AUD-10",
+      "name": "Owner dapat membaca log via API",
+      "pass": true,
+      "detail": "status=200 kejadian=9 aksi=auth.login,shift.open,sale.create,shift.close,inventory.adjust,settings.update"
+    },
+    {
+      "code": "AUD-11",
+      "name": "Filter aksi berjalan (action=auth.login)",
+      "pass": true,
+      "detail": "kejadian=4"
+    },
+    {
+      "code": "AUD-12",
+      "name": "Daftar berkas harian menampilkan tanggal hari ini",
+      "pass": true,
+      "detail": "2026-10-16(3446B)"
+    },
+    {
+      "code": "AUD-13",
+      "name": "Kasir tidak boleh membaca jejak audit",
+      "pass": true,
+      "detail": "status=403"
+    },
+    {
+      "code": "AUD-14",
+      "name": "Parameter tanggal tidak valid ditolak (tidak bisa baca file lain)",
+      "pass": true,
+      "detail": "..%2f..%2f.env→400, ../../etc/passwd→400, 2026-10→400, abc→400"
+    }
+  ]
+}

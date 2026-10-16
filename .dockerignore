@@ -1,0 +1,31 @@
+# Konteks build untuk image API/Web/E2E (repo root).
+# Dependensi di-install ulang di dalam image (platform Linux), jadi hasil
+# instalasi lokal (macOS) tidak boleh ikut tersalin.
+
+node_modules
+**/node_modules
+dist
+**/dist
+
+# git & editor
+.git
+.gitignore
+.DS_Store
+.idea
+.vscode
+
+# rahasia (env disuntik lewat compose / -e)
+.env
+.env.local
+.env.*.local
+
+# log & hasil uji lokal
+logs
+**/logs
+*.log
+docs
+
+# berkas yang tidak dibutuhkan di dalam image
+docker-compose*.yml
+README.md
+bun.lockb.tmp

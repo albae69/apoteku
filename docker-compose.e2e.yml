@@ -1,0 +1,103 @@
+# Stack lengkap Apoteku untuk pengujian end-to-end (E2E) di Docker:
+#   MySQL → API (Bun/Hono) → Web (nginx, SPA + proxy /api) → runner E2E (Playwright)
+#
+# Jalankan:
+#   docker compose -f docker-compose.e2e.yml up --build \
+#     --abort-on-container-exit --exit-code-from e2e
+#
+# Catatan: MySQL sengaja TIDAK mem-publish port ke host supaya tidak bentrok
+# dengan MySQL/MariaDB lokal. Bila perlu diakses dari host, tambahkan
+# ports: ["3307:3306"].
+
+name: apoteku-e2e
+
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: apoteku
+    volumes:
+      - apoteku-e2e-mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      interval: 3s
+      timeout: 5s
+      retries: 40
+      start_period: 20s
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    environment:
+      NODE_ENV: production
+      PORT: "4000"
+      DATABASE_URL: mysql://root:root@mysql:3306/apoteku
+      # Hanya untuk stack uji; jangan dipakai di produksi.
+      JWT_SECRET: e2e-secret-bukan-untuk-produksi
+      WEB_ORIGIN: http://localhost:8080
+      DB_POOL_SIZE: "20"
+      # Isi data contoh otomatis saat container pertama kali jalan.
+      SEED_ON_START: "true"
+      # Audit ditulis ke volume bersama supaya bisa diperiksa runner E2E.
+      AUDIT_DIR: /app/logs/audit
+      AUDIT_RETENTION_DAYS: "7"
+    ports:
+      - "4000:4000"
+    volumes:
+      - apoteku-e2e-logs:/app/logs
+    depends_on:
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "bun",
+          "-e",
+          "fetch('http://127.0.0.1:4000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 3s
+      timeout: 5s
+      retries: 40
+      start_period: 15s
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/"]
+      interval: 3s
+      timeout: 5s
+      retries: 30
+      start_period: 5s
+
+  e2e:
+    build:
+      context: .
+      dockerfile: docker/e2e/Dockerfile
+    environment:
+      API_BASE: http://api:4000
+      WEB_BASE: http://web
+      AUDIT_DIR: /app/logs/audit
+    volumes:
+      - apoteku-e2e-logs:/app/logs
+      # Hasil uji (JSON) ikut tertulis ke docs/ di host.
+      - ./docs:/app/docs
+    depends_on:
+      api:
+        condition: service_healthy
+      web:
+        condition: service_healthy
+    restart: "no"
+
+volumes:
+  apoteku-e2e-mysql:
+  apoteku-e2e-logs:

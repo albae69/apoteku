@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1792122085878,
+      "tag": "0000_cynical_arclight",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1792122653106,
+      "tag": "0001_sad_newton_destine",
+      "breakpoints": true
+    }
+  ]
+}

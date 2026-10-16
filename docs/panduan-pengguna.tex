@@ -1,0 +1,1025 @@
+% =====================================================================
+%  Panduan Pengguna Apoteku
+%  Kompilasi:  tectonic panduan-pengguna.tex
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[english,bahasa]{babel}
+\usepackage{graphicx}
+\usepackage[font=small,labelfont=bf,skip=4pt]{caption}
+\usepackage[a4paper,margin=2.4cm,top=2.6cm,bottom=2.6cm]{geometry}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true,linkcolor=primary,urlcolor=primary,citecolor=primary]{hyperref}
+\usepackage[most]{tcolorbox}
+
+% ---------------------------------------------------------------- warna
+\definecolor{primary}{HTML}{0F766E}   % teal
+\definecolor{accent}{HTML}{B45309}    % amber tua
+\definecolor{ink}{HTML}{1F2937}
+\definecolor{softgray}{HTML}{F3F4F6}
+\definecolor{rulegray}{HTML}{D1D5DB}
+
+% ------------------------------------------------------------- perintah
+\newcommand{\app}{Apoteku}
+\newcommand{\btn}[1]{\textcolor{primary}{\textbf{#1}}}
+\newcommand{\field}[1]{\textit{#1}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+
+% Sisipkan screenshot (docs/images) selebar area teks, dengan keterangan bernomor.
+\newcommand{\screenshot}[2]{%
+  \begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{images/#2}
+    \caption{#1}
+  \end{figure}%
+}
+
+% ---------------------------------------------------------------- tata letak
+\titleformat{\section}{\Large\bfseries\color{primary}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\large\bfseries\color{ink}}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{ink}}{\thesubsubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{1.6em}{0.6em}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{ink}{Panduan Pengguna \app}}
+\fancyhead[R]{\small\textcolor{ink}{\leftmark}}
+\fancyfoot[C]{\small\textcolor{ink}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+
+% ---------------------------------------------------------------- kotak
+\newtcolorbox{itembox}[1]{%
+  colback=primary!4, colframe=primary!55, boxrule=0.5pt, arc=1.4mm,
+  left=2.4mm, right=2.4mm, top=1.8mm, bottom=1.8mm, title={\textbf{#1}}, fonttitle=\color{white},
+  coltitle=white, colbacktitle=primary!75, breakable}
+
+\newtcolorbox{tipbox}[1]{%
+  colback=accent!5, colframe=accent!70!black, boxrule=0.5pt, arc=1.4mm,
+  left=2.4mm, right=2.4mm, top=1.8mm, bottom=1.8mm, title={\textbf{Tips: #1}}, fonttitle=\color{white},
+  coltitle=white, colbacktitle=accent!85, breakable}
+
+\newtcolorbox{warnbox}[1]{%
+  colback=red!4, colframe=red!60!black, boxrule=0.5pt, arc=1.4mm,
+  left=2.4mm, right=2.4mm, top=1.8mm, bottom=1.8mm, title={\textbf{Perhatian: #1}}, fonttitle=\color{white},
+  coltitle=white, colbacktitle=red!70!black, breakable}
+
+% ---------------------------------------------------------------- tabel
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\renewcommand{\arraystretch}{1.25}
+
+% Beri ruang lebih banyak untuk gambar agar tidak menumpuk di akhir dokumen.
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.72}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+
+% =====================================================================
+\begin{document}
+
+% ---------------------------------------------------------- halaman judul
+\begin{titlepage}
+  \centering
+  \vspace*{2.2cm}
+  {\color{primary}\rule{\textwidth}{2pt}}\\[0.5cm]
+  {\Huge\bfseries Panduan Pengguna\\[0.25cm] \app}\\[0.5cm]
+  {\large Sistem Manajemen Apotek --- Aplikasi Web}\\[0.35cm]
+  {\color{primary}\rule{\textwidth}{2pt}}\\[2.2cm]
+
+  \begin{tabular}{@{}r@{\hspace{1cm}}l@{}}
+    \textbf{Versi dokumen} & 1.0 \\
+    \textbf{Versi aplikasi} & 0.1.0 (MVP apotek tunggal) \\
+    \textbf{Tanggal}        & 16 Oktober 2026 \\
+    \textbf{Untuk}          & Pemilik, apoteker, kasir, dan staf apotek \\
+  \end{tabular}
+
+  \vfill
+  \begin{minipage}{0.86\textwidth}
+    \small\itshape
+    Dokumen ini menjelaskan cara memakai aplikasi \app{} sehari-hari: mulai dari
+    masuk, mengelola produk dan persediaan, membuka shift, melayani penjualan di
+    kasir, mencetak struk, sampai menutup shift dan memeriksa rekonsiliasi kas.
+  \end{minipage}
+  \vspace{1.2cm}
+\end{titlepage}
+
+% ---------------------------------------------------------------- daftar isi
+{\hypersetup{linkcolor=ink}
+\tableofcontents
+\newpage}
+
+% =====================================================================
+\section{Tentang panduan ini}
+
+Panduan ini ditujukan untuk \textbf{pengguna} aplikasi \app{} --- bukan untuk
+pengembang. Seluruh langkah ditulis mengikuti tampilan aplikasi yang
+sesungguhnya.
+
+\subsection{Konvensi penulisan}
+
+\begin{tabularx}{\textwidth}{@{}L{3.5cm}Y@{}}
+  \toprule
+  \textbf{Contoh penulisan} & \textbf{Artinya} \\
+  \midrule
+  \btn{Buka shift}   & Tombol yang harus diklik. \\
+  \field{Dibayar}    & Nama kolom atau kotak isian pada formulir. \\
+  \code{INV-20261016-ABC123} & Contoh kode/format data dari sistem. \\
+  \midrule
+  \end{tabularx}
+
+\vspace{0.3cm}
+
+\begin{tipbox}{}
+Tips berisi cara yang lebih cepat/efisien.
+\end{tipbox}
+
+\begin{warnbox}{}
+Perhatian menandai langkah yang, jika salah, dapat menyebabkan selisih kas atau
+stok.
+\end{warnbox}
+
+% =====================================================================
+\section{Mengenal Apoteku}
+
+\subsection{Apa itu Apoteku}
+\app{} adalah aplikasi web untuk mengelola operasional satu apotek: katalog obat,
+persediaan berbasis batch dan tanggal kedaluwarsa, pembelian dari supplier,
+penjualan di kasir, resep dokter, shift kasir, sampai laporan ringkas harian.
+Aplikasi dapat dibuka dari komputer, tablet, maupun ponsel karena tampilannya
+responsif.
+
+\subsection{Dua hal yang paling sering membingungkan}
+
+\textbf{1.\ Stok tidak disimpan pada produk, melainkan pada \emph{batch}.}
+Setiap penerimaan barang membuat batch baru berisi jumlah dan tanggal
+kedaluwarsa. Karena itu, satu produk bisa punya beberapa batch sekaligus.
+
+\textbf{2.\ Kasir wajib membuka \emph{shift} sebelum bertransaksi.}
+Shift adalah sesi kerja kasir, tempat uang awal dan uang akhir laci dicatat.
+Tanpa shift terbuka, tombol pembayaran di halaman Kasir tidak akan bekerja.
+
+\subsection{Peran pengguna}
+
+\begin{tabularx}{\textwidth}{@{}L{2.6cm}Y@{}}
+  \toprule
+  \textbf{Peran} & \textbf{Singkatnya} \\
+  \midrule
+  \textbf{owner}      & Pemilik. Akses paling luas, termasuk pengaturan apotek dan log audit. \\
+  \textbf{admin}      & Administrator. Setara owner untuk operasional harian, termasuk log audit. \\
+  \textbf{pharmacist} & Apoteker. Mengelola katalog obat, pembelian, penyesuaian stok, dan resep. \\
+  \textbf{cashier}    & Kasir. Melayani penjualan, membuka/menutup shift, dan mendaftarkan pelanggan. \\
+  \bottomrule
+\end{tabularx}
+
+\begin{warnbox}{hak akses ditegakkan di server}
+Tombol dan menu tampil untuk semua peran. Bila kasir menekan tombol yang
+khusus owner/apoteker, sistem akan menolak dengan pesan \textbf{``Tidak punya
+akses''}. Rincian lengkap per peran ada di Bagian~\ref{sec:rbac}.
+\end{warnbox}
+
+\subsection{Peta halaman}
+
+\begin{tabularx}{\textwidth}{@{}L{3.4cm}Y@{}}
+  \toprule
+  \textbf{Menu} & \textbf{Kegunaan} \\
+  \midrule
+  \textbf{Dashboard}    & Ringkasan penjualan, laba, nilai persediaan, produk terlaris hari ini. \\
+  \textbf{Kasir}        & Melayani penjualan (POS) dan mencetak struk. \\
+  \textbf{Transaksi}    & Riwayat penjualan, cetak ulang struk. \\
+  \textbf{Produk}       & Katalog obat/alkes/BHP, harga, satuan bertingkat. \\
+  \textbf{Persediaan}   & Stok per produk, daftar batch, kedaluwarsa, peringatan. \\
+  \textbf{Pembelian}    & Purchase order (PO) ke supplier dan penerimaan barang. \\
+  \textbf{Resep}        & Pencatatan resep dokter. \\
+  \textbf{Shift Kasir}  & Buka/tutup shift dan rekonsiliasi uang laci. \\
+  \textbf{Pengaturan}   & Profil apotek, apoteker penanggung jawab, catatan kaki struk. \\
+  \bottomrule
+\end{tabularx}
+
+% =====================================================================
+\section{Memulai}
+
+\subsection{Membuka aplikasi}
+Buka peramban (Chrome, Safari, Edge) dan akses alamat aplikasi yang diberikan
+oleh tim IT Anda, misalnya \code{http://localhost:8080}. Halaman masuk akan
+tampil.
+
+\subsection{Masuk (login)}
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=0.35em]
+  \item Isi \field{Email}.
+  \item Isi \field{Password}.
+  \item Klik \btn{Masuk}. Bila sedang diproses, tombol berubah menjadi
+        \btn{Memproses...}.
+\end{enumerate}
+
+\begin{itembox}{Akun contoh (data awal)}
+\begin{tabularx}{\textwidth}{@{}Y L{3.2cm}Y@{}}
+  \toprule
+  \textbf{Email} & \textbf{Peran} & \textbf{Password} \\
+  \midrule
+  \code{owner@apoteku.test}    & owner      & \code{password123} \\
+  \code{kasir@apoteku.test}    & cashier    & \code{password123} \\
+  \code{apoteker@apoteku.test} & pharmacist & \code{password123} \\
+  \bottomrule
+\end{tabularx}
+\end{itembox}
+
+\begin{warnbox}{ganti password akun contoh}
+Akun di atas hanya untuk masa uji coba. Sebelum dipakai sungguhan, pastikan
+password sudah diganti oleh tim IT.
+\end{warnbox}
+
+\screenshot{Halaman masuk (\emph{login}) aplikasi Apoteku.}{01-halaman-masuk}
+
+\subsection{Tata letak antarmuka}
+
+Setelah masuk, layar terdiri dari dua bagian:
+
+\begin{tabularx}{\textwidth}{@{}L{4.2cm}Y@{}}
+  \toprule
+  \textbf{Bagian} & \textbf{Keterangan} \\
+  \midrule
+  \textbf{Sidebar kiri} & Menu navigasi: Dashboard, Kasir, Transaksi, Produk, Persediaan, Pembelian, Resep, Shift Kasir, Pengaturan. Di bawahnya tertera nama dan peran Anda, serta tombol \btn{Keluar}. \\
+  \textbf{Area kerja}   & Isi halaman yang sedang dibuka. \\
+  \bottomrule
+\end{tabularx}
+
+Pada layar kecil (ponsel), sidebar berubah menjadi deretan menu di bagian atas,
+dan tombol \btn{Keluar} pindah ke kanan atas.
+
+\subsection{Keluar}
+Klik \btn{Keluar} di sidebar (atau di kanan atas pada ponsel). Anda akan kembali
+ke halaman masuk.
+
+\begin{tipbox}{kenapa tiba-tiba kembali ke halaman masuk?}
+Bila sesi Anda berakhir atau token kedaluwarsa, aplikasi otomatis
+mengembalikan ke halaman masuk. Cukup masuk kembali.
+\end{tipbox}
+
+% =====================================================================
+\section{Alur kerja harian (ringkas)}
+
+Urutan berikut adalah cara pakai yang disarankan untuk satu hari operasional.
+
+\begin{enumerate}[leftmargin=1.6em,itemsep=0.4em]
+  \item \textbf{Pagi --- periksa Dashboard.} Lihat kartu ``Perlu perhatian'':
+        berapa produk berstok rendah dan berapa batch mendekati kedaluwarsa.
+  \item \textbf{Periksa Persediaan.} Buka tab \btn{Peringatan}, catat item yang
+        harus segera dipesan atau dipisahkan.
+  \item \textbf{Buat Pembelian} untuk barang yang menipis/hampir kedaluwarsa
+        (Bagian~\ref{sec:pembelian}).
+  \item \textbf{Terima barang} saat kiriman datang, agar stok dan batch baru
+        tercatat.
+  \item \textbf{Buka shift} di halaman Shift Kasir, isi uang awal laci
+        (Bagian~\ref{sec:shift}).
+  \item \textbf{Layani penjualan} di halaman Kasir, cetak struk untuk pembeli
+        (Bagian~\ref{sec:kasir}).
+  \item \textbf{Catat resep} yang masuk dari pelanggan (Bagian~\ref{sec:resep}).
+  \item \textbf{Tutup shift} di akhir giliran kerja: masukkan uang fisik yang
+        dihitung, lalu simpan (Bagian~\ref{sec:shift}).
+  \item \textbf{Periksa Transaksi} untuk mencetak ulang struk
+        (Bagian~\ref{sec:transaksi}).
+\end{enumerate}
+
+% =====================================================================
+\section{Dashboard}
+\textbf{Judul halaman:} \emph{Dashboard --- ``Ringkasan operasional apotek hari ini''}
+
+Dashboard adalah ringkasan cepat kondisi apotek hari ini. Tidak ada tombol
+aksi di halaman ini.
+
+\screenshot{Dashboard: kartu statistik dan tabel ringkasan hari ini.}{dashboard}
+
+\subsection{Kartu statistik}
+
+\begin{tabularx}{\textwidth}{@{}L{4.4cm}Y@{}}
+  \toprule
+  \textbf{Kartu} & \textbf{Isinya} \\
+  \midrule
+  \textbf{Penjualan hari ini} & Total omzet hari ini, dengan keterangan jumlah transaksi. \\
+  \textbf{Laba hari ini}      & Perkiraan laba (omzet dikurangi harga pokok barang terjual). \\
+  \textbf{Nilai persediaan}   & Nilai stok saat ini, dengan keterangan jumlah produk aktif. \\
+  \textbf{Perlu perhatian}    & Dua angka: jumlah produk berstok rendah dan jumlah batch mendekati kedaluwarsa. \\
+  \bottomrule
+\end{tabularx}
+
+\subsection{Dua tabel}
+\begin{itemize}[leftmargin=1.4em,itemsep=0.3em]
+  \item \textbf{Produk terlaris hari ini} --- kolom \field{Produk}, \field{Qty},
+        \field{Omzet}.
+  \item \textbf{Transaksi terbaru} --- kolom \field{Kode}, \field{Waktu},
+        \field{Total}.
+\end{itemize}
+
+\begin{tipbox}{mulai dari sini}
+Kartu ``Perlu perhatian'' pada Dashboard adalah pintu masuk tercepat untuk tahu
+apa yang harus dikerjakan hari ini.
+\end{tipbox}
+
+% =====================================================================
+\section{Produk \& Obat}
+\textbf{Judul halaman:} \emph{Produk \& Obat --- ``Master data obat, alkes, dan BHP''}
+
+Halaman ini adalah katalog barang. Setiap penjualan, pembelian, dan resep
+mengacu ke produk di sini, jadi datanya harus benar lebih dulu.
+
+\subsection{Mencari produk}
+Ketik pada kotak pencarian \field{``Cari nama / SKU / barcode...''}. Tabel
+menampilkan kolom \field{Nama}, \field{SKU}, \field{Golongan}, \field{Stok}, dan
+\field{Harga jual}. Bila stok sama dengan atau di bawah stok minimum, angkanya
+berwarna kuning sebagai peringatan.
+
+\screenshot{Daftar produk beserta stok dan harga jualnya.}{produk}
+
+\subsection{Menambah produk baru}
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=0.35em]
+  \item Klik \btn{Tambah produk}.
+  \item Isi formulir berikut.
+  \item Klik \btn{Simpan produk}. Untuk membatalkan, klik \btn{Batal} atau
+        \btn{Tutup}.
+\end{enumerate}
+
+\begin{tabularx}{\textwidth}{@{}L{4.6cm}L{1.6cm}Y@{}}
+  \toprule
+  \textbf{Kolom isian} & \textbf{Wajib} & \textbf{Keterangan} \\
+  \midrule
+  \field{Nama produk} & Ya & Nama yang tampil di kasir dan struk, mis. ``Paracetamol 500mg''. \\
+  \field{SKU} & Ya & Kode unik internal. Contoh format: \code{OBT-0001}. Tidak boleh sama dengan produk lain. \\
+  \field{Barcode} & Tidak & Bila ada, dapat dipakai untuk pemindaian di kasir. \\
+  \field{Kategori} & Tidak & Mis. Analgesik, Antibiotik, Vitamin \& Suplemen. \\
+  \field{Bentuk sediaan} & Ya & tablet, kapsul, sirup, salep, krim, gel, tetes, injeksi, suppositoria, serbuk, lainnya. \\
+  \field{Golongan} & Ya & obat bebas, obat bebas terbatas, obat keras, narkotika, psikotropika, alkes, bhp. \\
+  \field{Satuan dasar} & Ya & Satuan terkecil untuk perhitungan stok, mis. \code{tablet}. \\
+  \field{Harga jual / satuan dasar} & Ya & Harga untuk satu satuan dasar. \\
+  \field{Harga pokok} & Ya & Harga beli, dipakai untuk menghitung laba. \\
+  \field{Stok minimum} & Tidak & Batas peringatan stok rendah. \\
+  \field{Wajib resep} & Tidak & Bila dicentang, produk ditandai \textbf{Resep} di kasir. \\
+  \bottomrule
+\end{tabularx}
+
+\screenshot{Formulir tambah produk, termasuk blok ``Satuan \& konversi''.}{produk-form}
+
+\subsection{Satuan bertingkat (mis. strip dan box)}
+
+Pada blok \field{Satuan \& konversi}, klik \btn{Satuan} untuk menambah baris.
+Isi \field{Nama} (mis. \code{strip}), \field{Konversi}, dan \field{Harga jual}.
+
+\begin{itembox}{arti kolom Konversi}
+\field{Konversi} adalah \textbf{jumlah satuan dasar} di dalam satu satuan ini.
+Contoh: 1 strip berisi 10 tablet $\rightarrow$ konversi = 10. Bila harga satu
+strip Rp6.500, maka saat menjual 1 strip, stok berkurang 10 tablet dan pembeli
+dibayar Rp6.500.
+\end{itembox}
+
+Contoh pengisian untuk Paracetamol:
+
+\begin{tabularx}{\textwidth}{@{}L{3cm}L{2.4cm}L{3.6cm}Y@{}}
+  \toprule
+  \textbf{Nama} & \textbf{Konversi} & \textbf{Harga jual} & \textbf{Artinya} \\
+  \midrule
+  (satuan dasar) & 1   & Rp700     & 1 tablet \\
+  \code{strip}   & 10  & Rp6.500   & 1 strip = 10 tablet \\
+  \code{box}     & 100 & Rp60.000  & 1 box = 100 tablet \\
+  \bottomrule
+\end{tabularx}
+
+\begin{warnbox}{satu satuan dasar wajib ada}
+Pastikan satuan dasar (konversi = 1) selalu ada. Satuan dasar adalah acuan
+perhitungan stok di seluruh aplikasi.
+\end{warnbox}
+
+\begin{tipbox}{golongan obat}
+Golongan ``obat keras'' tampil sebagai label oranye di daftar produk, agar mudah
+dikenali saat melayani pembeli.
+\end{tipbox}
+
+\subsection{Catatan}
+Saat ini perubahan (edit) dan penghapusan produk belum tersedia lewat tombol di
+halaman ini; fitur tersebut masih melalui tim IT/API. Produk yang sudah dipakai
+pada transaksi tidak dapat dihapus karena akan merusak riwayat.
+
+% =====================================================================
+\section{Persediaan}
+\textbf{Judul halaman:} \emph{Persediaan --- ``Stok, batch, tanggal kedaluwarsa, dan peringatan''}
+
+Halaman ini bersifat \textbf{lihat saja} (tidak mengubah data) dan terbagi
+menjadi tiga tab. Kotak pencarian \field{``Cari produk / batch...''} tersedia
+pada tab Stok dan Batch.
+
+\subsection{Tab \btn{Stok Produk}}
+Ringkasan stok tiap produk. Kolom: \field{Produk}, \field{Stok},
+\field{Minimum}, \field{HPP}, \field{Status}.
+
+\begin{tabularx}{\textwidth}{@{}L{3.2cm}Y@{}}
+  \toprule
+  \textbf{Status} & \textbf{Artinya} \\
+  \midrule
+  \textbf{Aman}       & Stok di atas batas minimum. \\
+  \textbf{Stok rendah} & Stok sudah mencapai atau di bawah batas minimum --- segera rencanakan pembelian. \\
+  \textbf{Habis}      & Stok nol. Produk tidak bisa dijual sebelum ada penerimaan barang. \\
+  \bottomrule
+\end{tabularx}
+
+\screenshot{Tab \emph{Stok Produk}: status Aman, Stok rendah, atau Habis.}{persediaan-stok}
+
+\subsection{Tab \btn{Batch \& Expiry}}
+Rincian per batch. Kolom: \field{Produk}, \field{No. Batch},
+\field{Kedaluwarsa}, \field{Sisa}, \field{Estimasi}. Tersedia filter:
+\field{Semua batch}, \field{Masih ada stok}, \field{Mendekati ED},
+\field{Sudah ED}, \field{Stok habis}.
+
+\begin{tabularx}{\textwidth}{@{}L{3.6cm}Y@{}}
+  \toprule
+  \textbf{Tanda kedaluwarsa} & \textbf{Artinya} \\
+  \midrule
+  \textbf{ED lewat}          & Batch sudah kedaluwarsa. Jangan dijual; pisahkan dari rak. \\
+  \textbf{N hari lagi} (kuning) & Tinggal $\le$ 90 hari. Prioritaskan batch ini agar tidak terbuang. \\
+  \textbf{N hari lagi} (hijau)  & Masih lebih dari 90 hari. \\
+  \textbf{--}                & Batch tidak memiliki tanggal kedaluwarsa. \\
+  \bottomrule
+\end{tabularx}
+
+\screenshot{Tab \emph{Batch \& Expiry}: sisa tiap batch dan estimasi kedaluwarsa.}{persediaan-batch}
+
+\subsection{Tab \btn{Peringatan}}
+Dua daftar siap tindak:
+\begin{itemize}[leftmargin=1.4em,itemsep=0.3em]
+  \item \textbf{Stok di bawah minimum} --- kolom \field{Produk}, \field{Stok},
+        \field{Min}.
+  \item \textbf{Mendekati / melewati kedaluwarsa} --- kolom \field{Produk},
+        \field{Batch}, \field{ED}, \field{Sisa}.
+\end{itemize}
+
+\screenshot{Tab \emph{Peringatan}: stok menipis dan batch mendekati kedaluwarsa.}{persediaan-peringatan}
+
+\begin{itembox}{FEFO: batch mana yang dijual lebih dulu?}
+Aplikasi otomatis mengambil stok dari \textbf{batch yang paling cepat
+kedaluwarsa} (First Expired First Out). Anda tidak perlu memilih batch secara
+manual saat menjual. Karena itu, pastikan tanggal kedaluwarsa diisi dengan benar
+saat menerima barang.
+\end{itembox}
+
+\begin{warnbox}{batas 90 hari bersifat tetap}
+Peringatan ``mendekati kedaluwarsa'' muncul bila sisa waktu $\le$ 90 hari.
+Ini pengaturan bawaan sistem.
+\end{warnbox}
+
+\subsection{Catatan}
+Penyesuaian stok (opname, barang rusak, barang kedaluwarsa) belum memiliki tombol
+di halaman ini; saat ini dilakukan melalui tim IT/API. Bila Anda menemukan
+selisih stok, catat dan laporkan agar dicatat sebagai penyesuaian.
+
+% =====================================================================
+\section{Pembelian}
+\label{sec:pembelian}
+\textbf{Judul halaman:} \emph{Pembelian --- ``Purchase order dan penerimaan barang dari PBF/supplier''}
+
+\screenshot{Daftar purchase order beserta statusnya.}{pembelian}
+
+\subsection{Membuat purchase order (PO)}
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=0.35em]
+  \item Klik \btn{Buat PO}.
+  \item Pilih \field{Supplier}. Bila belum ada, minta tim IT menambahkannya.
+  \item Isi \field{Tanggal order}.
+  \item Pada blok \field{Item pembelian}, klik \btn{Item} lalu lengkapi tiap
+        baris: produk, \field{No. batch}, tanggal kedaluwarsa, \field{Qty}, dan
+        \field{Harga}.
+  \item Klik \btn{Simpan PO}. Status PO menjadi \textbf{ordered}.
+\end{enumerate}
+
+\begin{warnbox}{isi nomor batch dan tanggal kedaluwarsa}
+Kedua kolom ini menentukan cara sistem memilih stok saat menjual (FEFO) dan
+kapan peringatan kedaluwarsa muncul. Jangan dikosongkan bila barang memiliki
+kedaluwarsa.
+\end{warnbox}
+
+\screenshot{Formulir purchase order: supplier, tanggal, dan item pembelian.}{pembelian-po}
+
+\subsection{Menerima barang}
+Saat kiriman datang, cari PO berstatus \textbf{ordered} pada tabel, lalu klik
+\btn{Terima}. Sistem akan membuat batch baru dan menambah stok secara otomatis.
+Status PO berubah menjadi \textbf{received}.
+
+\begin{tabularx}{\textwidth}{@{}L{2.8cm}Y@{}}
+  \toprule
+  \textbf{Status PO} & \textbf{Artinya} \\
+  \midrule
+  \textbf{draft}     & Belum dikirim ke supplier. \\
+  \textbf{ordered}   & Sudah dipesan; tombol \btn{Terima} tersedia. \\
+  \textbf{received}  & Barang sudah diterima; stok dan batch sudah bertambah. \\
+  \textbf{cancelled} & Dibatalkan. \\
+  \bottomrule
+\end{tabularx}
+
+\begin{tipbox}{urutan yang benar}
+Buat PO $\rightarrow$ terima barang $\rightarrow$ baru dijual. Bila barang dijual
+tanpa diterima lebih dulu, stok tidak akan bertambah dan kasir akan menerima
+pesan ``Stok tidak mencukupi''.
+\end{tipbox}
+
+% =====================================================================
+\section{Shift Kasir}
+\label{sec:shift}
+\textbf{Judul halaman:} \emph{Shift Kasir --- ``Buka/tutup shift dan rekonsiliasi uang tunai laci''}
+
+Shift adalah sesi kerja kasir. Semua penjualan yang Anda lakukan tercatat pada
+shift yang sedang terbuka.
+
+\subsection{Membuka shift}
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=0.35em]
+  \item Buka menu \textbf{Shift Kasir}.
+  \item Pada kotak \field{Uang awal di laci}, isi jumlah uang tunai yang Anda
+        taruh di laci saat mulai bekerja (tanpa titik atau koma).
+  \item Isi \field{Catatan} bila perlu (opsional).
+  \item Klik \btn{Buka shift}. Status berubah menjadi \textbf{Terbuka}.
+\end{enumerate}
+
+\begin{warnbox}{hitung uang awal dengan benar}
+Uang awal adalah titik nol perhitungan kas. Bila salah memasukkan angka, selisih
+kas di akhir shift akan terlihat meski uang fisiknya benar.
+\end{warnbox}
+
+\screenshot{Formulir buka shift: mengisi uang awal di laci.}{shift-buka}
+
+\subsection{Selama shift}
+Halaman menampilkan ringkasan yang bertambah setiap kali Anda menjual:
+
+\begin{tabularx}{\textwidth}{@{}L{4.2cm}Y@{}}
+  \toprule
+  \textbf{Angka} & \textbf{Artinya} \\
+  \midrule
+  \field{Uang awal}       & Uang laci saat shift dibuka. \\
+  \field{Transaksi}       & Jumlah transaksi pada shift ini. \\
+  \field{Total penjualan} & Seluruh nilai penjualan shift ini. \\
+  \field{Tunai}           & Bagian penjualan yang dibayar tunai. \\
+  \field{Non-tunai}       & Bagian penjualan yang dibayar non-tunai (QRIS, debit, dan lain-lain). \\
+  \field{Kas seharusnya}  & Uang tunai yang seharusnya ada di laci. \\
+  \bottomrule
+\end{tabularx}
+
+\begin{itembox}{rumus kas seharusnya}
+\[
+\text{Kas seharusnya} = \text{Uang awal} + \text{Total penjualan} - \text{Non-tunai}
+\]
+Hanya penjualan \textbf{tunai} yang menambah uang di laci. Pembayaran QRIS,
+debit, atau transfer tidak masuk laci.
+\end{itembox}
+
+\subsection{Menutup shift}
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=0.35em]
+  \item Hitung uang tunai fisik di laci.
+  \item Isi \field{Uang fisik dihitung} dengan hasil hitungan tersebut.
+  \item Perhatikan baris \field{Selisih}: hijau berarti pas (Rp0), merah berarti ada
+        selisih antara uang fisik dan \emph{kas seharusnya}.
+  \item Isi \field{Catatan} bila ada selisih, agar dapat ditelusuri.
+  \item Klik \btn{Tutup shift}.
+\end{enumerate}
+
+\begin{warnbox}{selisih kas}
+Selisih muncul dari kesalahan kembalian, transaksi yang tidak tercatat, atau uang
+awal yang salah diisi. Bila selisih muncul, jangan langsung mengubah angka ---
+tulis catatan dan laporkan agar bisa ditelusuri.
+\end{warnbox}
+
+\screenshot{Halaman shift saat berjalan: penjualan, tunai, dan kas seharusnya.}{shift-terbuka}
+
+\subsection{Riwayat shift}
+Tabel \textbf{Riwayat shift} menampilkan kolom \field{Kasir}, \field{Buka},
+\field{Penjualan}, \field{Seharusnya}, \field{Fisik}, dan \field{Selisih}. Shift
+yang masih berjalan diberi label \textbf{terbuka}.
+
+\begin{tipbox}{satu user, satu shift}
+Satu pengguna hanya boleh memiliki satu shift terbuka. Untuk berganti kasir,
+tutup shift terlebih dahulu, lalu kasir berikutnya membuka shift baru.
+\end{tipbox}
+
+% =====================================================================
+\section{Kasir (POS)}
+\label{sec:kasir}
+\textbf{Judul halaman:} \emph{Kasir --- ``Transaksi penjualan \& penebusan resep''}
+
+Ini halaman yang paling sering dipakai. Bila Anda belum membuka shift, halaman
+ini akan menampilkan kartu \textbf{``Buka shift dulu''} --- buka shift terlebih
+dahulu (Bagian~\ref{sec:shift}).
+
+\subsection{Langkah melayani satu pembeli}
+
+\begin{enumerate}[leftmargin=1.5em,itemsep=0.4em]
+  \item \textbf{Cari produk.} Ketik nama pada kotak
+        \field{``Scan barcode atau cari nama obat...''}. Bila ada barcode,
+        arahkan pemindai ke kotak tersebut. Hasil pencarian menampilkan
+        \field{Stok} dan harga per satuan.
+  \item \textbf{Tambahkan ke keranjang.} Klik salah satu tombol satuan:
+        \btn{+ tablet} untuk satuan dasar, atau \btn{+ strip (Rp6.500)} untuk
+        satuan besar. Produk yang wajib resep diberi label \textbf{Resep}.
+  \item \textbf{Atur jumlah.} Pada keranjang, gunakan tombol \textbf{+} dan
+        \textbf{--}, atau ikon tempat sampah untuk menghapus satu baris.
+  \item \textbf{Pilih pelanggan} pada kotak \field{Pelanggan} (bawaan:
+        ``--- Umum ---'').
+  \item \textbf{Isi diskon/pajak} bila ada pada kolom \field{Diskon} dan
+        \field{Pajak}.
+  \item \textbf{Pilih metode pembayaran} pada kotak \field{Metode}:
+        \code{cash}, \code{debit}, \code{credit}, \code{qris},
+        \code{ewallet}, atau \code{transfer}.
+  \item \textbf{Isi jumlah uang yang diterima} pada kotak \field{Dibayar}.
+        Untuk tunai, sistem otomatis menampilkan \field{Kembalian}.
+  \item \textbf{Klik} \btn{Bayar Rp...}. Tunggu sampai muncul kartu hijau
+        ``Transaksi \dots\ berhasil''.
+  \item \textbf{Klik} \btn{Cetak struk} untuk mencetak, lalu \btn{Tutup} untuk
+        melayani pembeli berikutnya.
+\end{enumerate}
+
+\begin{tabularx}{\textwidth}{@{}L{3.4cm}Y@{}}
+  \toprule
+  \textbf{Ringkasan nota} & \textbf{Keterangan} \\
+  \midrule
+  \field{Subtotal}  & Jumlah sebelum diskon dan pajak. \\
+  \field{Total}     & Jumlah akhir yang harus dibayar. \\
+  \field{Kembalian} & Uang kembali (ditampilkan untuk pembayaran tunai). \\
+  \bottomrule
+\end{tabularx}
+
+\begin{tipbox}{memakai satuan besar}
+Menjual 1 strip dari produk yang satuannya sudah diatur akan otomatis mengurangi
+stok 10 tablet dan memakai harga strip. Tidak perlu menghitung tablet satu per
+satu.
+\end{tipbox}
+
+\screenshot{Kasir: keranjang, total, dan kembalian sebelum pembayaran.}{kasir-keranjang}
+
+\screenshot{Konfirmasi transaksi berhasil dengan nomor nota dan tombol \btn{Cetak struk}.}{kasir-berhasil}
+
+\subsection{Struk}
+Struk dicetak berukuran 80~mm (printer termal). Isinya: nama dan alamat apotek,
+nomor nota, tanggal, nama kasir, nama pelanggan (bila ada), rincian item,
+subtotal, diskon, pajak, \textbf{TOTAL}, metode pembayaran, kembalian (bila
+tunai), catatan kaki, dan nama apoteker penanggung jawab.
+
+\begin{warnbox}{sebelum menutup transaksi}
+Periksa kembali item dan jumlah pada keranjang. Setelah nota tersimpan, transaksi
+tidak dapat dihapus dari antarmuka. Bila terjadi kesalahan, catat nomor nota
+(\code{INV-...}) dan laporkan ke tim IT.
+\end{warnbox}
+
+% =====================================================================
+\section{Transaksi}
+\label{sec:transaksi}
+\textbf{Judul halaman:} \emph{Transaksi --- ``Riwayat penjualan dan cetak ulang struk''}
+
+\subsection{Menyaring riwayat}
+
+\begin{tabularx}{\textwidth}{@{}L{4cm}Y@{}}
+  \toprule
+  \textbf{Kontrol} & \textbf{Keterangan} \\
+  \midrule
+  \field{Sejak tanggal} & Menampilkan transaksi mulai tanggal tertentu (bawaan: hari ini). \\
+  \field{Semua transaksi} & Centang untuk menampilkan seluruh riwayat tanpa batas tanggal. \\
+  \bottomrule
+\end{tabularx}
+
+Di atas tabel tertera ringkasan \field{Transaksi} (jumlah transaksi) dan
+\field{Omzet} (total nilai penjualan).
+
+\screenshot{Riwayat transaksi dengan filter tanggal dan total omzet.}{transaksi}
+
+\subsection{Mencetak ulang struk}
+\begin{enumerate}[leftmargin=1.4em,itemsep=0.35em]
+  \item Temukan nota pada tabel (kolom \field{Kode}, \field{Waktu},
+        \field{Kasir}, \field{Item}, dan \field{Total}).
+  \item Klik \btn{Struk} pada baris tersebut. Pratinjau muncul di panel kanan.
+  \item Klik \btn{Cetak struk}.
+\end{enumerate}
+
+Nota yang dibatalkan ditandai label merah \textbf{void} pada kolom Kode.
+
+% =====================================================================
+\screenshot{Pratinjau struk 80~mm dan tombol \btn{Cetak struk}.}{transaksi-struk}
+
+\section{Resep}
+\label{sec:resep}
+\textbf{Judul halaman:} \emph{Resep --- ``Pencatatan resep dokter dan penebusan obat''}
+
+\screenshot{Daftar resep beserta statusnya.}{resep}
+
+\subsection{Mencatat resep}
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=0.35em]
+  \item Klik \btn{Input resep}.
+  \item Isi \field{Nama pasien} (wajib).
+  \item Pilih \field{Dokter} (bila ada) dan \field{Pelanggan} (bila terdaftar).
+  \item Pada blok \field{Item resep}, klik \btn{Obat} lalu pilih obat, isi
+        \field{Jumlah}, dan tulis \field{Signa} (mis. ``3 x 1 sehari'').
+  \item Klik \btn{Simpan resep}.
+\end{enumerate}
+
+\begin{tabularx}{\textwidth}{@{}L{2.8cm}Y@{}}
+  \toprule
+  \textbf{Status resep} & \textbf{Artinya} \\
+  \midrule
+  \textbf{pending}   & Baru dicatat, belum diserahkan. \\
+  \textbf{dispensed} & Obat sudah diserahkan ke pasien. \\
+  \textbf{cancelled} & Resep dibatalkan. \\
+  \bottomrule
+\end{tabularx}
+
+\screenshot{Formulir input resep: pasien, dokter, dan item resep.}{resep-form}
+
+\begin{tipbox}{resep lalu penjualan}
+Untuk menebus resep, catat resepnya di halaman ini, lalu lakukan penjualan di
+halaman Kasir seperti biasa. Produk berlabel \textbf{Resep} adalah obat yang
+memerlukan resep.
+\end{tipbox}
+
+\subsection{Catatan}
+Mengubah status resep (\emph{pending/ dispensed/ cancelled}) belum tersedia
+lewat tombol di halaman ini; saat ini melalui tim IT/API.
+
+% =====================================================================
+\section{Pengaturan}
+\textbf{Judul halaman:} \emph{Pengaturan --- ``Profil apotek, apoteker penanggung jawab, dan struk''}
+
+Nilai di halaman ini dipakai pada struk dan identitas apotek. Hanya
+\textbf{owner} dan \textbf{admin} yang dapat menyimpan perubahan.
+
+\begin{tabularx}{\textwidth}{@{}L{4.4cm}L{1.5cm}Y@{}}
+  \toprule
+  \textbf{Kolom isian} & \textbf{Wajib} & \textbf{Keterangan} \\
+  \midrule
+  \field{Nama apotek} & Ya & Tampil di bagian atas struk. \\
+  \field{Telepon} & Tidak & Tampil sebagai ``Telp. \dots'' pada struk. \\
+  \field{Alamat}  & Tidak & Tampil di bawah nama apotek. \\
+  \field{NPWP}    & Tidak & Identitas pajak apotek. \\
+  \field{PPN (\%)} & Tidak & Persentase pajak bawaan. \\
+  \field{Apoteker penanggung jawab} & Tidak & Nama yang muncul di kaki struk. \\
+  \field{No. SIPA} & Tidak & Nomor izin apoteker penanggung jawab. \\
+  \field{Catatan kaki struk} & Tidak & Ucapan penutup pada struk, mis. ``Terima kasih, semoga lekas sembuh!''. \\
+  \bottomrule
+\end{tabularx}
+
+Klik \btn{Simpan}. Bila berhasil, muncul pesan ``Pengaturan tersimpan.''
+
+\begin{tipbox}{cek hasilnya di struk}
+Setelah menyimpan, cetak satu struk uji dari halaman Kasir untuk memastikan nama,
+alamat, dan catatan kaki sudah benar.
+\end{tipbox}
+
+% =====================================================================
+\screenshot{Halaman pengaturan: profil apotek dan catatan kaki struk.}{pengaturan}
+
+\section{Log audit}
+\label{sec:audit}
+
+\app{} mencatat aktivitas penting secara otomatis ke berkas harian. Yang dicatat
+antara lain: login berhasil dan gagal, transaksi penjualan, buka/tutup shift,
+perubahan pengaturan, penyesuaian stok, dan perubahan data lain
+(create/update/delete).
+
+\begin{tabularx}{\textwidth}{@{}L{4.6cm}Y@{}}
+  \toprule
+  \textbf{Aspek} & \textbf{Keterangan} \\
+  \midrule
+  Siapa yang bisa melihat & Hanya \textbf{owner} dan \textbf{admin}. \\
+  Bentuk penyimpanan & Berkas per hari bernama \code{audit-YYYY-MM-DD.log} pada server. \\
+  Isi setiap baris & Waktu, pengguna, aksi, metode/alamat, hasil, dan ringkasan data terkait. \\
+  Keamanan & Kata sandi dan token tidak pernah ditulis ke log. \\
+  Masa simpan & Berkas lama dihapus otomatis (bawaan 90 hari). \\
+  Akses & Melalui tim IT/API (\code{GET /api/audit}, \code{GET /api/audit/days}). \\
+  \bottomrule
+\end{tabularx}
+
+\begin{itembox}{untuk apa ini}
+Log audit membantu menelusuri kejadian, misalnya ``siapa yang mengubah harga
+produk ini'' atau ``kapan shift ditutup''. Log tidak dapat diubah dari aplikasi.
+\end{itembox}
+
+% =====================================================================
+\section{Peran dan hak akses}
+\label{sec:rbac}
+
+Tabel berikut merangkum siapa yang boleh melakukan apa. Hak akses ditegakkan di
+server, bukan hanya disembunyikan di tampilan.
+
+\begin{longtable}{@{}L{5.4cm}L{9.4cm}@{}}
+  \toprule
+  \textbf{Tindakan} & \textbf{Peran yang diizinkan} \\
+  \midrule
+  \endhead
+  Melihat semua halaman (baca) & Semua peran yang sudah masuk \\
+  Menambah/mengubah katalog produk & owner, admin, pharmacist \\
+  Membuat PO, menerima barang, membatalkan PO & owner, admin, pharmacist \\
+  Penyesuaian stok (opname/rusak/expired) & owner, admin, pharmacist \\
+  Mencatat resep & owner, admin, pharmacist, cashier \\
+  Melakukan penjualan & Semua peran \emph{dan} wajib punya shift terbuka \\
+  Buka/tutup shift & Semua peran (tutup hanya oleh pemilik shift atau owner) \\
+  Mendaftarkan pelanggan & Semua peran \\
+  Mengubah kategori, produsen, supplier, dokter & owner, admin, pharmacist \\
+  Mengubah pengaturan apotek & owner, admin \\
+  Melihat log audit & owner, admin \\
+  \bottomrule
+\end{longtable}
+
+% =====================================================================
+\section{Pesan yang sering muncul dan solusinya}
+
+\begin{longtable}{@{}L{6.0cm}L{8.8cm}@{}}
+  \toprule
+  \textbf{Pesan} & \textbf{Penyebab dan solusi} \\
+  \midrule
+  \endhead
+  \textbf{``Buka shift kasir terlebih dahulu sebelum bertransaksi''}
+  & Anda menekan \btn{Bayar} tanpa shift terbuka. Buka menu \textbf{Shift Kasir} lalu klik \btn{Buka shift}. \\
+  \addlinespace
+  \textbf{``Keranjang masih kosong''}
+  & Belum ada item yang ditambahkan. Cari produk dan klik tombol satuan \btn{+ ...} lebih dulu. \\
+  \addlinespace
+  \textbf{``Stok tidak mencukupi untuk salah satu produk''}
+  & Jumlah yang diminta melebihi stok yang ada. Periksa \textbf{Persediaan} $\rightarrow$ tab \textbf{Batch \& Expiry}; bila barang sudah datang, pastikan penerimaan barang sudah dilakukan di halaman Pembelian. \\
+  \addlinespace
+  \textbf{``Stok berubah karena transaksi lain. Silakan coba lagi.''}
+  & Dua kasir menjual produk yang sama pada saat yang hampir bersamaan. Ulangi transaksi --- stok sudah diperbarui. \\
+  \addlinespace
+  \textbf{``Jumlah pembayaran kurang dari total''}
+  & Nilai pada \field{Dibayar} lebih kecil dari \field{Total}. Perbaiki jumlahnya. \\
+  \addlinespace
+  \textbf{``Email atau password salah''}
+  & Periksa ejaan email dan password. Perhatikan huruf besar/kecil. \\
+  \addlinespace
+  \textbf{``Terlalu banyak percobaan login. Coba lagi nanti.''}
+  & Pengaman dari percobaan login berulang. Tunggu beberapa menit, lalu coba lagi. \\
+  \addlinespace
+  \textbf{``Tidak punya akses''}
+  & Peran Anda tidak berhak untuk tindakan itu (lihat Bagian~\ref{sec:rbac}). Minta owner/admin/apoteker melakukannya. \\
+  \addlinespace
+  \textbf{``SKU sudah dipakai''}
+  & Kode SKU harus unik. Gunakan kode lain, mis. tambahkan akhiran angka. \\
+  \addlinespace
+  \textbf{``Masih ada shift yang terbuka. Tutup dulu sebelum buka shift baru.''}
+  & Satu pengguna hanya boleh punya satu shift terbuka. Tutup shift yang berjalan lebih dulu. \\
+  \addlinespace
+  \textbf{``Hanya pemilik shift yang boleh menutup shift ini''}
+  & Anda mencoba menutup shift milik pengguna lain. Hanya pemilik shift (atau owner) yang boleh menutup. \\
+  \addlinespace
+  \textbf{``Pembelian sudah diterima''}
+  & Barang pada PO tersebut sudah pernah diterima. Tidak perlu diterima dua kali. \\
+  \bottomrule
+\end{longtable}
+
+% =====================================================================
+\section{Praktik yang disarankan}
+
+\begin{itemize}[leftmargin=1.4em,itemsep=0.45em]
+  \item \textbf{Buka shift setiap mulai bekerja}, dan \textbf{tutup shift}
+        sebelum pulang. Jangan meninggalkan shift terbuka.
+  \item \textbf{Hitung uang fisik dengan tenang} saat menutup shift, dan tulis
+        catatan bila ada selisih.
+  \item \textbf{Isi nomor batch dan tanggal kedaluwarsa} setiap kali menerima
+        barang, agar FEFO dan peringatan kedaluwarsa bekerja.
+  \item \textbf{Periksa Dashboard dan tab Peringatan setiap pagi} untuk
+        merencanakan pembelian.
+  \item \textbf{Jual batch mendekati kedaluwarsa lebih dulu} --- sistem sudah
+        mengurutkannya, tetapi pastikan stok fisik di rak mengikuti urutan yang
+        sama.
+  \item \textbf{Biasakan memilih pelanggan} pada transaksi, agar riwayat pembeli
+        anggota tetap terekam.
+  \item \textbf{Simpan/arsipkan struk} bila pembeli meminta salinan; cetak ulang
+        tersedia di halaman Transaksi.
+\end{itemize}
+
+% =====================================================================
+\appendix
+\section{Data contoh (seed)}
+
+Data berikut terpasang pada aplikasi contoh dan berguna untuk latihan.
+
+\subsection{Apotek}
+\begin{tabularx}{\textwidth}{@{}L{4.6cm}Y@{}}
+  \toprule
+  \textbf{Kolom} & \textbf{Nilai contoh} \\
+  \midrule
+  Nama apotek & Apoteku Sehat \\
+  Alamat      & Jl. Melati No. 12, Jakarta \\
+  Telepon     & 021-1234567 \\
+  Apoteker    & Apt. Rina Sari \\
+  No. SIPA    & SIPA-12345 \\
+  Catatan kaki struk & Terima kasih, semoga lekas sembuh! \\
+  \bottomrule
+\end{tabularx}
+
+\subsection{Produk}
+\begin{tabularx}{\textwidth}{@{}L{2.4cm}L{4.6cm}L{2.6cm}Y@{}}
+  \toprule
+  \textbf{SKU} & \textbf{Nama} & \textbf{Golongan} & \textbf{Harga jual} \\
+  \midrule
+  OBT-0001 & Paracetamol 500mg & obat bebas & Rp700/tablet; Rp6.500/strip; Rp60.000/box \\
+  OBT-0002 & Amoxicillin 500mg & obat keras (wajib resep) & Rp1.500/kapsul; Rp14.000/strip \\
+  OBT-0003 & Vitamin C 500mg & obat bebas & Rp900/tablet; Rp25.000/tube \\
+  OBT-0004 & OBH Combi Batuk Flu 60ml & obat bebas terbatas & Rp18.000/botol \\
+  ALK-0001 & Termometer Digital & alkes & Rp45.000/pcs \\
+  \bottomrule
+\end{tabularx}
+
+\subsection{Batch contoh}
+\begin{tabularx}{\textwidth}{@{}L{2.6cm}L{4.4cm}L{3.4cm}Y@{}}
+  \toprule
+  \textbf{Batch} & \textbf{Produk} & \textbf{Kedaluwarsa} & \textbf{Jumlah} \\
+  \midrule
+  PCM-A1 & Paracetamol 500mg & +400 hari & 500 \\
+  PCM-A2 & Paracetamol 500mg & +60 hari  & 120 \\
+  AMX-B1 & Amoxicillin 500mg & +300 hari & 200 \\
+  VTC-C1 & Vitamin C 500mg   & +500 hari & 300 \\
+  OBH-D1 & OBH Combi 60ml    & +25 hari  & 24 \\
+  THM-E1 & Termometer Digital & +900 hari & 10 \\
+  \bottomrule
+\end{tabularx}
+
+\begin{tipbox}{berlatih FEFO}
+Jual Paracetamol 1 tablet di halaman Kasir, lalu periksa
+\textbf{Persediaan} $\rightarrow$ tab \textbf{Batch \& Expiry}. Batch
+\code{PCM-A2} (kedaluwarsa lebih dekat) akan berkurang lebih dulu.
+\end{tipbox}
+
+\subsection{Akun dan master data lain}
+\begin{itemize}[leftmargin=1.4em,itemsep=0.3em]
+  \item \textbf{Akun} (semua berpassword \code{password123}):
+    \begin{itemize}[leftmargin=1.2em,itemsep=0.15em,topsep=0.2em]
+      \item \code{owner@apoteku.test} --- Budi Owner (owner)
+      \item \code{kasir@apoteku.test} --- Sari Kasir (kasir)
+      \item \code{apoteker@apoteku.test} --- Apt. Rina (apoteker)
+    \end{itemize}
+  \item \textbf{Kategori}: Analgesik, Antibiotik, Vitamin \& Suplemen, Batuk \&
+        Flu, Alat Kesehatan.
+  \item \textbf{Supplier}: PT Kimia Farma Trading, PT Enseval Putera.
+  \item \textbf{Pelanggan}: Umum, Ibu Ani (anggota), Bapak Joko (anggota).
+  \item \textbf{Dokter}: dr. Andi Wijaya, dr. Maya Putri, Sp.A.
+\end{itemize}
+
+\section{Daftar istilah}
+
+\begin{tabularx}{\textwidth}{@{}L{4.2cm}Y@{}}
+  \toprule
+  \textbf{Istilah} & \textbf{Arti} \\
+  \midrule
+  \textbf{Batch} & Satu kelompok barang dari satu penerimaan, dengan nomor batch dan tanggal kedaluwarsa sendiri. \\
+  \textbf{FEFO} & \emph{First Expired First Out} --- batch yang paling cepat kedaluwarsa dijual lebih dulu. \\
+  \textbf{PO} & \emph{Purchase Order} --- pesanan pembelian ke supplier. \\
+  \textbf{Satuan dasar} & Satuan terkecil untuk perhitungan stok (mis. tablet). \\
+  \textbf{Konversi} & Jumlah satuan dasar di dalam satu satuan besar (mis. 1 strip = 10 tablet). \\
+  \textbf{Shift} & Sesi kerja kasir tempat uang awal dan uang akhir laci dicatat. \\
+  \textbf{Kas seharusnya} & Uang tunai yang seharusnya ada di laci pada akhir shift. \\
+  \textbf{Selisih} & Perbedaan antara uang fisik yang dihitung dan kas seharusnya. \\
+  \textbf{SKU} & Kode unik internal produk. \\
+  \textbf{Struk} & Bukti transaksi berukuran 80 mm. \\
+  \bottomrule
+\end{tabularx}
+
+\section{Menjalankan aplikasi (untuk tim IT)}
+
+\begin{itembox}{cara cepat dengan Docker}
+\begin{enumerate}[leftmargin=1.4em,itemsep=0.25em]
+  \item Siapkan Docker, lalu dari folder proyek jalankan:
+        \code{bun run docker:e2e} untuk menyalakan seluruh sistem (basis data,
+        API, dan web) sekaligus menjalankan uji otomatis.
+  \item Buka \code{http://localhost:8080} pada peramban.
+  \item Untuk mematikan dan membersihkan: \code{bun run docker:e2e:down}.
+\end{enumerate}
+\end{itembox}
+
+\begin{tabularx}{\textwidth}{@{}L{4.6cm}Y@{}}
+  \toprule
+  \textbf{Kebutuhan} & \textbf{Keterangan} \\
+  \midrule
+  Basis data & MySQL 8 atau MariaDB. \\
+  Alamat bawaan & Web: \code{localhost:8080} (Docker) atau \code{localhost:5173} (pengembangan); API: \code{localhost:4000}. \\
+  Migrasi \& data contoh & Dijalankan otomatis saat container pertama kali menyala. \\
+  Pengujian & \code{bun run test:security}, \code{bun run test:e2e}, \code{bun run test:audit}, \code{bun run test:load}. \\
+  \bottomrule
+\end{tabularx}
+
+\vfill
+\begin{center}
+  \small\textcolor{ink}{--- Akhir dokumen ---}
+\end{center}
+
+\end{document}

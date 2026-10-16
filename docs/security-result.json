@@ -1,0 +1,167 @@
+{
+  "base": "http://localhost:4000",
+  "at": "2026-10-16T04:33:38.004Z",
+  "checks": [
+    {
+      "code": "AUTH-01",
+      "name": "Endpoint terproteksi tanpa token → 401",
+      "pass": true,
+      "detail": "status=401",
+      "severity": "high"
+    },
+    {
+      "code": "AUTH-02",
+      "name": "Token malformed → 401",
+      "pass": true,
+      "detail": "status=401",
+      "severity": "high"
+    },
+    {
+      "code": "AUTH-03",
+      "name": "Token dirusak (signature diubah) → 401",
+      "pass": true,
+      "detail": "status=401",
+      "severity": "high"
+    },
+    {
+      "code": "AUTH-04",
+      "name": "Token ditandatangani secret salah → 401",
+      "pass": true,
+      "detail": "status=401",
+      "severity": "high"
+    },
+    {
+      "code": "AUTH-05",
+      "name": "Algoritma \"alg=none\" ditolak → 401",
+      "pass": true,
+      "detail": "status=401",
+      "severity": "high"
+    },
+    {
+      "code": "AUTH-06",
+      "name": "Token kedaluwarsa ditolak → 401",
+      "pass": true,
+      "detail": "status=401",
+      "severity": "high"
+    },
+    {
+      "code": "AUTH-07",
+      "name": "Token valid diterima → 200",
+      "pass": true,
+      "detail": "status=200",
+      "severity": "info"
+    },
+    {
+      "code": "AUTH-08",
+      "name": "/health publik (tidak butuh token) → 200",
+      "pass": true,
+      "detail": "status=200",
+      "severity": "info"
+    },
+    {
+      "code": "LEAK-01",
+      "name": "Respons login tidak membocorkan hash password",
+      "pass": true,
+      "detail": "bersih",
+      "severity": "high"
+    },
+    {
+      "code": "LEAK-02",
+      "name": "/auth/me tidak membocorkan hash password",
+      "pass": true,
+      "detail": "bersih",
+      "severity": "high"
+    },
+    {
+      "code": "LEAK-03",
+      "name": "Error internal tidak membocorkan detail SQL/stack trace",
+      "pass": true,
+      "detail": "status=403 · bocor=false · body={\"error\":\"Tidak punya akses\",\"details\":null}",
+      "severity": "medium"
+    },
+    {
+      "code": "INJ-01",
+      "name": "SQL injection pada parameter ?q= tidak berdampak",
+      "pass": true,
+      "detail": "status=200 · hasil=0",
+      "severity": "high"
+    },
+    {
+      "code": "INJ-02",
+      "name": "Upaya DROP TABLE via parameter tidak menghapus data",
+      "pass": true,
+      "detail": "status=200 · total produk masih 5",
+      "severity": "high"
+    },
+    {
+      "code": "INJ-03",
+      "name": "ID non-numerik tidak memicu error 500",
+      "pass": true,
+      "detail": "status=400",
+      "severity": "medium"
+    },
+    {
+      "code": "MASS-01",
+      "name": "Field berlebih (id/role) diabaikan saat create",
+      "pass": true,
+      "detail": "status=201 · id=6",
+      "severity": "medium"
+    },
+    {
+      "code": "RBAC-01",
+      "name": "Role kasir tidak boleh mengubah pengaturan apotek",
+      "pass": true,
+      "detail": "status=403 · nama berubah=false (Apoteku Sehat → Apoteku Sehat)",
+      "severity": "high"
+    },
+    {
+      "code": "RBAC-02",
+      "name": "Role owner tetap boleh mengubah pengaturan",
+      "pass": true,
+      "detail": "status=200",
+      "severity": "info"
+    },
+    {
+      "code": "RBAC-03",
+      "name": "Role kasir tidak boleh menghapus master data",
+      "pass": true,
+      "detail": "status=403",
+      "severity": "medium"
+    },
+    {
+      "code": "IDOR-01",
+      "name": "Kasir tidak boleh menutup shift milik user lain",
+      "pass": true,
+      "detail": "status=403 (shift#3 milik apoteker)",
+      "severity": "medium"
+    },
+    {
+      "code": "CORS-01",
+      "name": "Origin asing tidak diizinkan CORS",
+      "pass": true,
+      "detail": "Access-Control-Allow-Origin=(tidak ada)",
+      "severity": "high"
+    },
+    {
+      "code": "CORS-02",
+      "name": "Origin resmi web diizinkan",
+      "pass": true,
+      "detail": "Access-Control-Allow-Origin=http://localhost:5173",
+      "severity": "info"
+    },
+    {
+      "code": "HDR-01",
+      "name": "Security headers terpasang",
+      "pass": true,
+      "detail": "semua ada",
+      "severity": "low"
+    },
+    {
+      "code": "RATE-01",
+      "name": "Brute force login dibatasi (rate limit/429)",
+      "pass": true,
+      "detail": "30 percobaan → 401=18, 429=12, 242ms",
+      "severity": "high"
+    }
+  ]
+}
